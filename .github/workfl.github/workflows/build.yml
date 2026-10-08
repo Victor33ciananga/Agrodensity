@@ -1,0 +1,28 @@
+name: Build AgroDensity APK
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Récupérer le code
+        uses: actions/checkout@v4
+
+      - name: Compiler AgroDensity
+        uses: ArtemSBulgakov/buildozer-action@v1
+        id: buildozer
+        with:
+          workdir: .
+          buildozer_version: stable
+
+      - name: Télécharger l'APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: AgroDensity-APK
+          path: ${{ steps.buildozer.outputs.filename }}
