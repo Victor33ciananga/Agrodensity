@@ -19,10 +19,16 @@ jobs:
         with:
           python-version: "3.10"
 
+      - name: Installer Java 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
       - name: Installer les dépendances système
         run: |
           sudo apt-get update
-          sudo apt-get install -y git zip unzip openjdk-17-jdk autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
+          sudo apt-get install -y git zip unzip autoconf libtool pkg-config zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake libffi-dev libssl-dev
 
       - name: Installer Buildozer
         run: |
@@ -31,9 +37,10 @@ jobs:
 
       - name: Compiler l'APK
         run: |
+          java -version
           yes | buildozer -v android debug > build.log 2>&1 || echo failed > failed.txt
           echo "===== ERREURS ====="
-          grep -n -i -E "error|failed|exception|not found|no such" build.log | grep -v -E "won't be automatically|DEPRECATION|stty" | tail -n 30
+          grep -n -i -E "error|failed|exception|not found|no such|what went wrong" build.log | grep -v -E "won't be automatically|DEPRECATION|stty" | tail -n 30
           echo "===== FIN DU JOURNAL ====="
           grep -v -E "^# +[A-Za-z0-9_]+ = " build.log | tail -n 40
           test ! -f failed.txt
