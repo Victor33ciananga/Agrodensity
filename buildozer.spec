@@ -1,5 +1,6 @@
 [app]
 title = Agro Density
+icon.filename = %(source.dir)s/icon.png
 package.name = agrodensity
 package.domain = org.agroplus
 source.dir = .
